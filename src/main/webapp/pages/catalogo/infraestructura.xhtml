@@ -1,0 +1,395 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:pt="http://java.sun.com/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/generalTemplate.html">
+
+	<ui:define name="content">
+		<script type="text/javascript">
+			function handleDrop(event, ui) {
+				var dropped = ui.draggable;
+				dropped.fadeOut('fast');
+
+			}
+		</script>
+		<a4j:outputPanel id="all">
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-lg-12">
+						<h1 class="page-header">INFRAESTRUCTURAS</h1>
+					</div>
+				</div>
+
+				<h:form id="form">
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+					<a4j:outputPanel id="actList1">
+						<ui:fragment
+							rendered="#{infraestructuraMbean.breadcumb.size() > 0}">
+							<ul class="breadcrumbs-alt">
+								<ui:repeat var="act" value="#{infraestructuraMbean.breadcumb}">
+
+									<li><a4j:commandLink value="#{act.data.nombre}"
+											action="#{infraestructuraMbean.updateSelected(act)}"
+											render="actList actList1 ubic panelData dataPanelAct">
+										</a4j:commandLink></li>
+
+								</ui:repeat>
+								<li><a class="current">#{infraestructuraMbean.selectedNode.data.nombre}</a></li>
+							</ul>
+						</ui:fragment>
+
+					</a4j:outputPanel>
+					<a4j:outputPanel id="dataPanelAct">
+						<div class="#{infraestructuraMbean.colums}">
+							<p:dataGrid id="actList" var="act"
+								value="#{infraestructuraMbean.tre}"
+								columns="#{infraestructuraMbean.rows}">
+								<f:facet name="header">
+            #{infraestructuraMbean.selectedNode.data.nombre}
+            <a4j:commandLink
+										rendered="#{infraestructuraMbean.selectedNode.data.nombre != null and !infraestructuraMbean.showData}"
+										action="#{infraestructuraMbean.showData()}" title="Ver datos"
+										styleClass="pull-right" render="panelData dataPanelAct">
+										<i style="margin-left: 1em;" class="fa fa-search-plus"></i>
+									</a4j:commandLink>
+
+									<a4j:commandLink
+										rendered="#{infraestructuraMbean.selectedNode.data.nombre != null and infraestructuraMbean.showData}"
+										action="#{infraestructuraMbean.hideData()}"
+										title="Ocultar datos" styleClass="pull-right"
+										render="panelData dataPanelAct form">
+										<i style="margin-left: 1em;" class="fa fa-search-minus"></i>
+									</a4j:commandLink>
+
+									<a4j:commandLink
+										rendered="#{infraestructuraMbean.selectedNode.data.nombre != null}"
+										oncomplete="$('#myModalClon').modal('show'); return false;"
+										action="#{infraestructuraMbean.updateClon()}" title="Clonar"
+										styleClass="pull-right" render="panelClon">
+										<i style="margin-left: 1em;" class="fa fa-copy "></i>
+									</a4j:commandLink>
+
+
+									<a4j:commandLink
+										rendered="#{infraestructuraMbean.selectedNode.data.nombre != null}"
+										title="Editar" styleClass="pull-right"
+										oncomplete="$('#myModalUpdate').modal('show'); return false;"
+										action="#{infraestructuraMbean.update()}" render="ubicForm">
+										<i style="margin-left: 1em;" class="fa  fa-pencil-square-o"></i>
+
+									</a4j:commandLink>
+									<a4j:commandLink title="Adicionar" styleClass="pull-right"
+										oncomplete="$('#myModal').modal('show'); return false;">
+										<i style="margin-left: 1em;" class="fa  fa-plus"></i>
+									</a4j:commandLink>
+
+								</f:facet>
+
+								<a4j:commandLink
+									action="#{infraestructuraMbean.updateSelected(act)}"
+									render="actList actList1 ubic">
+									<p:panel id="pnl" styleClass="panel-body"
+										header="#{act.data.nombre}" style="text-align:center">
+										<p:panelGrid columns="4" style="width:100%">
+
+											<p:row>
+												<p:column colspan="3" rowspan="2"
+													style="text-align: right; border-color: 2px solid white;">
+													<i style="color: #1FB5AD; font-size: 4em;"
+														class="fa  fa-pencil-square-o"></i>
+												</p:column>
+												<p:column colspan="1" rowspan="1">
+
+												</p:column>
+											</p:row>
+
+											<p:row>
+												<p:column colspan="1" rowspan="1"
+													style="text-align: right;display:block">
+													<a4j:commandLink
+														action="#{infraestructuraMbean.showData()}"
+														actionListener="#{infraestructuraMbean.updateSelected(act)}"
+														title="Ver datos" styleClass="pull-right"
+														render="panelData dataPanelAct actList1">
+														<i style="margin-left: 1em; display: block"
+															class="fa fa-search-plus"></i>
+													</a4j:commandLink>
+													<a4j:commandLink title="Eliminar" styleClass="pull-right"
+														action="#{infraestructuraMbean.remove(act)}"
+														render="panelData dataPanelAct ">
+														<i style="margin-left: 1em;" class="fa fa-minus"></i>
+													</a4j:commandLink>
+												</p:column>
+											</p:row>
+
+										</p:panelGrid>
+									</p:panel>
+								</a4j:commandLink>
+
+							</p:dataGrid>
+						</div>
+					</a4j:outputPanel>
+
+
+
+					<h:panelGroup id="panelData">
+						<ui:fragment rendered="#{infraestructuraMbean.showData}">
+							<div class="col-lg-8">
+
+								<div style="background: white; margin-top: 1em;">
+
+									<header class="panel-heading tab-bg-dark-navy-blue tab-right ">
+									<ul class="nav nav-tabs pull-right">
+										<li class="active"><a data-toggle="tab" href="#home-3">
+												DATOS </a></li>
+										<li class=""><a data-toggle="tab" href="#about-3">
+												CLONES </a></li>
+										<li class=""><a data-toggle="tab" href="#img">
+												IMAGENES </a></li>
+										<li class=""><a data-toggle="tab" href="#doc">
+												DOCUMENTOS </a></li>
+										<li class=""><a data-toggle="tab" href="#elem">
+												ELEMENTOS </a></li>
+										<li class=""><a data-toggle="tab" href="#mant">
+												MANTENIMIENTO </a></li>
+									</ul>
+									</header>
+									<a4j:outputPanel id="ubic">
+										<div class="panel-body">
+											<div class="tab-content">
+												<div id="home-3" class="tab-pane active">												
+													<div class="col-lg-6">
+
+														<div class="form-group">
+															<h:outputLabel value="Nombre" for="nombre" />
+															<h:outputText id="nombre1" styleClass="form-control"
+																value="#{infraestructuraMbean.selectedInfraestructuraModelo.nombre}"
+																title="nombre"></h:outputText>
+														</div>
+														<div class="form-group">
+															<h:outputLabel value="Area mantenimiento" for="aream" />
+															<h:outputText id="aream1" styleClass="form-control"
+																value="#{infraestructuraMbean.selectedInfraestructuraModelo.idArea.nombre}"
+																title="Area mantenimiento"></h:outputText>
+														</div>
+
+													</div>
+
+
+												</div>
+												<div id="about-3" class="tab-pane">
+													<div class="col-lg-12">
+														<h:dataTable
+															styleClass="table table-striped table-bordered table-hover dataTable no-footer"
+															value="#{infraestructuraMbean.clonList}" var="c">
+															<h:column>
+																<f:facet name="header">Nombre</f:facet>
+																<h:outputText value="#{c.nombre}" />
+															</h:column>
+															<h:column>
+																<f:facet name="header">Ubicacion</f:facet>
+																<h:outputText value="#{c.idUbic.nombre}" />
+															</h:column>
+														</h:dataTable>
+
+													</div>
+
+												</div>
+												<div id="img" class="tab-pane">img</div>
+												<div id="doc" class="tab-pane">doc</div>
+												<div id="elem" class="tab-pane">
+													<a4j:outputPanel id="wer">
+														<h:form>
+															<input type="hidden" name="${_csrf.parameterName}"
+																value="${_csrf.token}" />
+															<p:autoComplete id="acSimple"
+																value="#{infraestructuraMbean.currentElement}"
+																completeMethod="#{infraestructuraMbean.listElement()}" />
+															<a4j:commandButton
+																action="#{infraestructuraMbean.addElemt()}" render="wer"
+																value="salvar"></a4j:commandButton>
+															<h:dataTable columnClasses="colum30,colum60,colum10"
+																styleClass="table table-striped table-bordered table-hover dataTable no-footer"
+																value="#{infraestructuraMbean.elementos}" var="r">
+																<h:column>
+																	<f:facet name="header">Nombre</f:facet>
+																	<h:outputText value="#{r.nombre}" />
+																</h:column>
+															</h:dataTable>
+														</h:form>
+													</a4j:outputPanel>
+												</div>
+												<div id="mant" class="tab-pane">mant</div>
+											</div>
+										</div>
+
+									</a4j:outputPanel>
+								</div>
+								<!--tab nav end-->
+
+							</div>
+						</ui:fragment>
+					</h:panelGroup>
+					<!--right sidebar start-->
+					<div class="right-sidebar">
+						<div class="search-row">
+							<input type="text" placeholder="Search" class="form-control"></input>
+						</div>
+						<div class="right-stat-bar">
+							<p:dataTable id="ListAct"
+								styleClass="table  table-hover general-table"
+								value="#{infraestructuraMbean.availTree}" var="act">
+								<p:column headerText="Activos Disponibles">
+
+									<a4j:commandLink style="width: 100%" value="#{act.data.nombre}"
+										class="btn btn-primary"
+										action="#{infraestructuraMbean.onAct(act)}"
+										render="dataPanelAct">
+
+									</a4j:commandLink>
+
+								</p:column>
+
+							</p:dataTable>
+						</div>
+					</div>
+					<!--right sidebar end-->
+				</h:form>
+			</div>
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="myModalLabel">ADICIONAR ACTIVO</h4>
+						</div>
+
+						<h:form role="form">
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" />
+							<div class="modal-body">
+
+								<a4j:outputPanel id="qweqwe">
+									<div class="col-lg-6">
+
+											<div class="form-group">
+												<h:outputLabel id="ubic1" value="Nombre" for="nombre" />
+												<h:inputText id="nombre1" styleClass="form-control"
+													value="#{infraestructuraMbean.currentInfraestructuraModelo.nombre}"
+													title="nombre" required="true"></h:inputText>
+											</div>
+											<div class="form-group">
+												<h:outputLabel value="Area mantenimiento" for="dimensiones1" />
+												<h:selectOneMenu styleClass="form-control"
+													value="#{infraestructuraMbean.selectedArea}">
+													<f:selectItem itemValue="#{null}"
+														itemLabel="-- selecione el area --" />
+													<f:selectItems value="#{infraestructuraMbean.areas}"
+														var="area" itemValue="#{area.idArea}"
+														itemLabel="#{area.nombre}" />
+												</h:selectOneMenu>
+											</div>
+
+										</div>
+								</a4j:outputPanel>
+
+								<div class="modal-footer">
+									<a4j:commandLink class="btn btn-default" value="Cancelar"
+										oncomplete="$('#myModal').modal('hide'); return false;">
+									</a4j:commandLink>
+
+
+									<h:commandButton class="btn btn-primary"
+										action="#{infraestructuraMbean.add()}" value="Salvar" />
+								</div>
+
+							</div>
+						</h:form>
+					</div>
+
+				</div>
+				<!-- /.modal-content -->
+			</div>
+
+			<!-- /.modal-dialog -->
+
+
+
+			<div class="modal fade" id="myModalUpdate" tabindex="-1"
+				role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="myModalLabel">EDITAR ACTIVO</h4>
+						</div>
+						<h:form role="form">
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" />
+							<div class="modal-body">
+								<a4j:outputPanel id="ubicForm">
+									<div class="col-lg-6">
+
+											<div class="form-group">
+												<h:outputLabel id="ubic1" value="Nombre" for="nombre" />
+												<h:inputText id="nombre1" styleClass="form-control"
+													value="#{infraestructuraMbean.currentInfraestructuraModelo.nombre}"
+													title="nombre" required="true"></h:inputText>
+											</div>
+											<div class="form-group">
+												<h:outputLabel value="Area mantenimiento" for="dimensiones1" />
+												<h:selectOneMenu styleClass="form-control"
+													value="#{infraestructuraMbean.selectedArea}">
+													<f:selectItem itemValue="#{null}"
+														itemLabel="-- selecione el area --" />
+													<f:selectItems value="#{infraestructuraMbean.areas}"
+														var="area" itemValue="#{area.idArea}"
+														itemLabel="#{area.nombre}" />
+												</h:selectOneMenu>
+											</div>
+
+
+										</div>
+								</a4j:outputPanel>
+
+								<div class="modal-footer">
+									<a4j:commandLink class="btn btn-default" value="Cancelar"
+										action="#{infraestructuraMbean.cleanCurrent()}"
+										render="qweqwe"
+										oncomplete="$('#myModalUpdate').modal('hide'); return false;">
+									</a4j:commandLink>
+									<h:commandButton class="btn btn-primary"
+										action="#{infraestructuraMbean.updateInfra()}" value="Salvar" />
+
+								</div>
+							</div>
+						</h:form>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+
+				<!-- /.modal-dialog -->
+			</div>
+
+		
+
+
+		</a4j:outputPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

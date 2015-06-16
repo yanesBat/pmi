@@ -1,0 +1,120 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui" xmlns:a4j="http://richfaces.org/a4j">
+
+<ui:composition template="/templates/generalTemplate.html">
+	<ui:define name="content">
+		<h:form>
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+			<p:messages id="messages" showIcon="false"
+				autoUpdate="true" />
+		</h:form>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="page-header">Asignación de Custodio</h1>
+				</div>
+			</div>
+		</div>
+
+		<h:form role="form">
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+			<div class="modal-body">
+				<a4j:outputPanel id="addPanel">
+					<div class="row">
+						<a4j:outputPanel id="cntct">
+							<div class="col-lg-3">
+
+								<div class="form-group">
+
+									<h:outputLabel value="Custodio" />
+									<div class="input-group m-bot15">
+										<h:inputText styleClass="form-control"
+											style="border-bottom-right-radius:0px;border-top-right-radius:0px"
+											value="#{asigCustMbean.selectedContacto.nombre}"
+											title="Custodio" />
+										<span class="input-group-btn"> <a4j:commandLink
+												style="border-bottom-left-radius:0px;border-top-left-radius:0px;"
+												oncomplete="$('#myModal').modal('show'); return false;"
+												render="dt addPanel" class="btn btn-primary">
+												<i class=" fa fa-user"></i>
+											</a4j:commandLink>
+										</span>
+									</div>
+								</div>
+
+							</div>
+							<div class="col-lg-6">
+								<div class="form-group">
+									<h:outputLabel value="Observaciones" for="observaciones" />
+									<h:inputTextarea styleClass="form-control"
+										value="#{asigCustMbean.obsrv}" id="observaciones"
+										title="Observaciones" />
+								</div>
+							</div>
+
+						</a4j:outputPanel>
+						<div class="col-lg-12">
+
+							<a4j:commandLink class="btn btn-primary btn-xs"
+								style="margin-bottom:1em;margin-left:1em;"
+								oncomplete="$('#myModalAct').modal('show');asd(); return false;"
+								render="dt addPanel">
+								<i class="fa fa-lg fa-plus-circle"></i>
+											Activos
+										</a4j:commandLink>
+							<a4j:outputPanel id="activPanel">
+								<h:dataTable rows="5"
+									rendered="#{ not empty asigCustMbean.selectedActivos}"
+									columnClasses="colum50,colum50"
+									styleClass="table table-striped table-bordered table-hover dataTable no-footer"
+									value="#{asigCustMbean.selectedActivos}" var="c">
+									<h:column>
+										<f:facet name="header">Activo</f:facet>
+										<h:outputText value="#{c.nombre}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">Ubicación</f:facet>
+										<h:outputText value="#{c.idUbic.nombre}" />
+									</h:column>
+								</h:dataTable>
+							</a4j:outputPanel>
+
+						</div>
+
+					</div>
+				</a4j:outputPanel>
+
+				<a4j:outputPanel id="bntPanel">
+					<div class="modal-footer">
+						<a4j:commandButton
+							rendered="#{ not empty asigCustMbean.selectedActivos}"
+							render="cntct activPanel bntPanel messages"
+							oncomplete="setTimeout(function() { $('[id$=messages]').hide(1500); }, 5000);"
+							actionListener="#{asigCustMbean.addmov()}"
+							class="btn btn-primary" value="Salvar">
+
+						</a4j:commandButton>
+
+					</div>
+
+				</a4j:outputPanel>
+			</div>
+		</h:form>
+		<ui:include src="/pages/adminActivo/modals/modalContacto.xhtml" />
+		<ui:include src="/pages/adminActivo/modals/modalActivos.xhtml" >
+				<ui:param name="bean" value="#{asigCustMbean}" />
+		</ui:include>
+
+	</ui:define>
+</ui:composition>
+</html>

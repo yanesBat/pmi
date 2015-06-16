@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+ <session-factory name="">
+  <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+  <property name="hibernate.connection.password">postgres</property>
+  <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/pmi</property>
+  <property name="hibernate.connection.username">postgres</property>
+  <mapping class="com.system.entities.Usuario"/>
+  <mapping class="com.system.entities.Rol"/>
+  <mapping class="com.system.entities.UsuarioRol"/>
+  <mapping class="com.system.entities.Ubicacion"/>
+  <mapping class="com.system.entities.Tarea"/>
+  <mapping class="com.system.entities.Red"/>
+  <mapping class="com.system.entities.Ot"/>
+  <mapping class="com.system.entities.InfraestructuraModelo"/>
+  <mapping class="com.system.entities.InfraestructuraClon"/>
+  <mapping class="com.system.entities.Elemento"/>
+  <mapping class="com.system.entities.Danno"/>
+  <mapping class="com.system.entities.Contacto"/>
+  <mapping class="com.system.entities.Condicion"/>
+  <mapping class="com.system.entities.Area"/>
+  <mapping class="com.system.entities.ActivoModelo"/>
+  <mapping class="com.system.entities.ActivoClon"/>
+  <mapping class="com.system.entities.ActivoClonElemento"/>
+  <mapping class="com.system.entities.ActivoClonSolicitAdminAct"/>
+  <mapping class="com.system.entities.ActivoModeloElemento"/>
+  <mapping class="com.system.entities.ElementoInfraestructuraModelo"/>
+  <mapping class="com.system.entities.InfraestructuraClonElemento"/>
+  <mapping class="com.system.entities.OtTarea"/>
+  <mapping class="com.system.entities.RedDanno"/>
+  <mapping class="com.system.entities.Sistema"/>
+  <mapping class="com.system.entities.Sector"/>
+  <mapping class="com.system.entities.Telefono"/>
+  <mapping class="com.system.entities.SolicitAdminAct"/>
+  <mapping class="com.system.entities.ActivoClonMovimiento"/>
+  <mapping class="com.system.entities.Movimiento"/>
+ </session-factory>
+</hibernate-configuration>

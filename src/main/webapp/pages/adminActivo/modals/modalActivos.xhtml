@@ -1,0 +1,96 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	 xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich">
+
+	<div class="modal fade" id="myModalAct" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Seleccionar Activos</h4>
+				</div>
+				<h:form role="form">
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+					<div class="modal-body">
+						<a4j:outputPanel id="addPanel">
+							<div class="row">
+								<div class="col-lg-12">
+									<a4j:outputPanel id="dtu">
+										<rich:dataTable
+										id="dta"
+											columnClasses="colum10,colum30,colum30,colum30"
+											reRender="datascroller"											
+											rows="8"
+											styleClass="table table-striped table-bordered table-hover dataTable no-footer"
+											value="#{bean.activos}" var="c">
+											<rich:column>
+												<a4j:commandLink render="dtu"
+													actionListener="#{bean.addActivo(c)}">
+													<h:graphicImage
+														rendered="#{not bean.selectedActivos.contains(c)}"
+														value="/resources/images/greyCheckbox.png">
+													</h:graphicImage>
+													<h:graphicImage
+														rendered="#{bean.selectedActivos.contains(c)}"
+														value="/resources/images/greenCheckbox.png">
+													</h:graphicImage>
+												</a4j:commandLink>
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">Activo</f:facet>
+												<h:outputText value="#{c.nombre}" />
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">Ubicación</f:facet>
+												<h:outputText value="#{c.idUbic.nombre}" />
+											</rich:column>
+										</rich:dataTable>
+										<div>
+										<rich:dataScroller rendered="#{bean.activos.size() > 8}" maxPages="5" boundaryControls="hide" fastControls="hide" render="dtu" for="dta" ></rich:dataScroller>
+										</div>
+									</a4j:outputPanel>
+
+								</div>
+
+							</div>
+						</a4j:outputPanel>
+					</div>
+					<div class="modal-footer">
+
+						<a4j:commandButton
+							oncomplete="$('#myModalAct').modal('hide'); return false;"
+							actionListener="#{bean.addActivo(null)}"
+							render="activPanel bntPanel" class="btn btn-primary"
+							value="Salvar">
+						</a4j:commandButton>
+
+					</div>
+				</h:form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+
+		<!-- /.modal-dialog -->
+	</div>
+	<script type="text/javascript">
+    var currentMarker = null;
+    var saveLat;
+    var saveLng;
+ 
+    function handleClick(event) {
+           
+    }
+ 
+    
+</script>
+
+</ui:composition>

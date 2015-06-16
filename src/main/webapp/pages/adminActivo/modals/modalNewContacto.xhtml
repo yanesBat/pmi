@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+	<div class="modal fade" id="myModalNewCont" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Seleccionar Contacto</h4>
+				</div>
+				<h:form role="form">
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+					<div class="modal-body">
+						<a4j:outputPanel id="newContPan">
+							<div class="row">
+								<div class="col-lg-12">
+									<h:dataTable columnClasses="colum10,colum30,colum30,colum30"
+										styleClass="table table-striped table-bordered table-hover dataTable no-footer"
+										value="#{cambCustMbean.newContactos}" var="c">
+										<h:column>
+											<a4j:commandLink
+											actionListener="#{cambCustMbean.addNewContact(c)}"
+											render="cntct"
+												oncomplete="$('#myModalNewCont').modal('hide'); return false;">
+												<div class="chk"></div>
+											</a4j:commandLink>
+										</h:column>
+										<h:column>
+											<f:facet name="header">Nombre</f:facet>
+											<h:outputText value="#{c.nombre}" />
+										</h:column>
+										<h:column>
+											<f:facet name="header">Cédula</f:facet>
+											<h:outputText value="#{c.cedula}" />
+										</h:column>
+										<h:column>
+											<f:facet name="header">Usuario</f:facet>
+											<h:outputText value="#{c.idUsuario.usuario}" />
+										</h:column>
+									</h:dataTable>
+
+								</div>
+
+							</div>
+						</a4j:outputPanel>
+					</div>
+				</h:form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+
+		<!-- /.modal-dialog -->
+	</div>
+
+
+</ui:composition>

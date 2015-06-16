@@ -1,0 +1,261 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui" xmlns:a4j="http://richfaces.org/a4j">
+
+<ui:composition template="/templates/generalTemplate.html">
+	<ui:define name="content">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="page-header">Solicitudes</h1>
+				</div>
+			</div>
+			
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">ADICIONAR SOLICITUD</h4>
+					</div>
+					<h:form role="form">
+						<input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" />
+						<div class="modal-body">
+							<a4j:outputPanel id="addPanel">
+								<div class="row">
+									<div class="col-lg-5">
+										<div class="form-group">
+											<h:outputLabel value="Asunto" />
+											<h:selectOneMenu styleClass="form-control"
+												value="#{solAdminActMbean.selectedAsunto}">
+												<f:selectItem itemValue="#{null}"
+													itemLabel="-- selecione el asunto --" />
+												<f:selectItems value="#{solAdminActMbean.asuntos}"
+													var="asunto" itemValue="#{asunto}" itemLabel="#{asunto}" />
+											</h:selectOneMenu>
+										</div>
+
+										<div class="form-group">
+											<h:outputLabel value="Justificación" for="justificacion" />
+											<h:inputTextarea  styleClass="form-control" id="justificacion"
+												value="#{solAdminActMbean.currentSolicitud.justificacion}"
+												title="Justificación" />
+										</div>
+									</div>
+									<a4j:outputPanel id="dta">
+									<div class="col-lg-7">
+										<h:dataTable columnClasses="colum10,colum30,colum30,colum30"
+											styleClass="table table-striped table-bordered table-hover dataTable no-footer"
+											value="#{solAdminActMbean.activos}" var="c">
+											<h:column>
+												<a4j:commandLink render="dta"
+														actionListener="#{solAdminActMbean.addSelectedClon(c.idActivClon)}">
+														<h:graphicImage
+															rendered="#{not solAdminActMbean.selectedActivos.contains(c)}"
+															value="/resources/images/greyCheckbox.png">
+														</h:graphicImage>
+														<h:graphicImage
+															rendered="#{solAdminActMbean.selectedActivos.contains(c)}"
+															value="/resources/images/greenCheckbox.png">
+														</h:graphicImage>
+													</a4j:commandLink>
+											</h:column>
+											<h:column>
+												<f:facet name="header">Nombre</f:facet>
+												<h:outputText value="#{c.nombre}" />
+											</h:column>
+											<h:column>
+												<f:facet name="header">Ubicación</f:facet>
+												<h:outputText value="#{c.idUbic.nombre}" />
+											</h:column>
+											<h:column>
+												<f:facet name="header">Custodio</f:facet>
+												<h:outputText value="#{c.idContacto.nombre}" />
+											</h:column>
+										</h:dataTable>
+
+									</div>
+									</a4j:outputPanel>
+
+								</div>
+							</a4j:outputPanel>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">Cancelar</button>
+
+								<a4j:commandButton
+									oncomplete="$('#myModal').modal('hide'); return false;"
+									render="dt addPanel"
+									action="#{solAdminActMbean.addSolicitAdminAct()}"
+									class="btn btn-primary" value="Salvar">
+								</a4j:commandButton>
+
+							</div>
+						</div>
+					</h:form>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+		<div class="modal fade" id="myModalUpdate" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">EDITAR CONTACTO</h4>
+					</div>
+					<h:form role="form">
+						<input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" />
+						<div class="modal-body">
+
+							<a4j:outputPanel id="mod">
+								<div class="row">
+									<div class="col-lg-5">
+										<div class="form-group">
+											<h:outputLabel value="Asunto" />
+											<h:selectOneMenu styleClass="form-control"
+												value="#{solAdminActMbean.selectedAsunto}">
+												<f:selectItem itemValue="#{null}"
+													itemLabel="-- selecione el asunto --" />
+												<f:selectItems value="#{solAdminActMbean.asuntos}"
+													var="asunto" itemValue="#{asunto}" itemLabel="#{asunto}" />
+											</h:selectOneMenu>
+										</div>
+
+										<div class="form-group">
+											<h:outputLabel value="Justificación" for="justificacion" />
+											<h:inputTextarea  styleClass="form-control" id="justificacion"
+												value="#{solAdminActMbean.currentSolicitud.justificacion}"
+												title="Justificación" />
+										</div>
+									</div>
+									<div class="col-lg-7">
+										<a4j:outputPanel id="dtu">
+											<h:dataTable columnClasses="colum10,colum30,colum30,colum30"
+												styleClass="table table-striped table-bordered table-hover dataTable no-footer"
+												value="#{solAdminActMbean.activos}" var="c">
+												<h:column>
+													<a4j:commandLink render="dtu"
+														actionListener="#{solAdminActMbean.addSelectedClon(c.idActivClon)}">
+														<h:graphicImage
+															rendered="#{not solAdminActMbean.selectedActivos.contains(c)}"
+															value="/resources/images/greyCheckbox.png">
+														</h:graphicImage>
+														<h:graphicImage
+															rendered="#{solAdminActMbean.selectedActivos.contains(c)}"
+															value="/resources/images/greenCheckbox.png">
+														</h:graphicImage>
+													</a4j:commandLink>
+												</h:column>
+												<h:column>
+													<f:facet name="header">Nombre</f:facet>
+													<h:outputText value="#{c.nombre}" />
+												</h:column>
+												<h:column>
+													<f:facet name="header">Ubicación</f:facet>
+													<h:outputText value="#{c.idUbic.nombre}" />
+												</h:column>
+												<h:column>
+													<f:facet name="header">Custodio</f:facet>
+													<h:outputText value="#{c.idContacto.nombre}" />
+												</h:column>
+											</h:dataTable>
+										</a4j:outputPanel>
+
+									</div>
+								</div>
+							</a4j:outputPanel>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">Cancelar</button>
+									<a4j:commandButton
+									oncomplete="$('#myModalUpdate').modal('hide'); return false;"
+									render="dt"
+									action="#{solAdminActMbean.updateSolicitAdminAct()}"
+									class="btn btn-primary" value="Salvar">
+								</a4j:commandButton>
+
+							</div>
+						</div>
+					</h:form>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+
+			<!-- /.modal-dialog -->
+		</div>
+
+		<h:form>		
+			<a4j:commandLink class="btn btn-primary btn-xs" 
+						action="#{solAdminActMbean.cleanCurrent()}"
+						style="margin-bottom:1em;margin-left:1em;"
+						oncomplete="$('#myModal').modal('show'); return false;"
+						render="addPanel">
+						<i class="fa fa-lg fa-plus-circle"></i>
+						adicionar
+					</a4j:commandLink>
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+			<h:dataTable id="dt"
+				columnClasses="colum20,colum15,colum50,colum5,colum10"
+				styleClass="table table-striped table-bordered table-hover dataTable no-footer"
+				value="#{solAdminActMbean.solicitudes()}" var="c">
+				<h:column>
+					<f:facet name="header">Usuario</f:facet>
+					<h:outputText value="#{c.usuario.usuario}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Asunto</f:facet>
+					<h:outputText value="#{c.asunto}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Justificacion</f:facet>
+					<h:outputText value="#{c.justificacion}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Activos</f:facet>
+					<h:outputText
+						value="#{solAdminActMbean.clonCount(c.idSolicitAdminAct)}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Acciones</f:facet>
+					<a4j:commandLink
+						action="#{solAdminActMbean.updateSolicitAdminAct(c)}"
+						title="Editar"
+						oncomplete="$('#myModalUpdate').modal('show'); return false;"
+						render="mod">
+						<i style="margin-left: 1em;" class="fa fa-lg fa-pencil-square-o"></i>
+					</a4j:commandLink>
+					<h:commandLink
+						action="#{solAdminActMbean.removeSolicitAdminAct(c.idSolicitAdminAct)}"
+						title="Eliminar">
+						<i style="margin-left: 1em;" class=" fa fa-lg fa-times"></i>
+					</h:commandLink>
+
+				</h:column>
+			</h:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

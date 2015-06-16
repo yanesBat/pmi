@@ -1,0 +1,63 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui" xmlns:a4j="http://richfaces.org/a4j">
+
+<ui:composition template="/templates/generalTemplate.html">
+	<ui:define name="content">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="page-header">Movimientos</h1>
+				</div>
+			</div>
+
+		</div>
+		<a4j:commandLink>
+		</a4j:commandLink>
+
+		<h:form>
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+				<a4j:outputPanel id="dsp">
+			<rich:dataTable id="dt" rows="9"
+				columnClasses="colum10,colum20,colum30,colum30,colum10"
+				styleClass="table table-striped table-bordered table-hover dataTable no-footer"
+				value="#{movMbean.allMov()}" var="m">
+				<rich:column sortBy="#{m.fecha.toString()}">
+					<f:facet name="header">Fecha</f:facet>
+					<h:outputText value="#{m.fecha.toString()}" />
+				</rich:column>
+				<rich:column sortBy="#{m.tipo}">
+					<f:facet name="header">Tipo</f:facet>
+					<h:outputText value="#{m.tipo}" />
+				</rich:column>
+				<rich:column sortBy="#{m.de}">
+					<f:facet name="header">De</f:facet>
+					<h:outputText value="#{m.de}" />
+				</rich:column>
+				<rich:column sortBy="#{m.a}">
+					<f:facet name="header">A</f:facet>
+					<h:outputText value="#{m.a}" />
+				</rich:column>
+				<rich:column >
+					<f:facet name="header">Activos</f:facet>
+					<h:outputText value="#{movMbean.clonCount(m.idMovimiento)}" />
+				</rich:column>
+			</rich:dataTable>
+			<div>
+				<rich:dataScroller maxPages="5" boundaryControls="hide" fastControls="hide"
+					render="dsp" for="dt"></rich:dataScroller>
+			</div>
+			</a4j:outputPanel>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>
